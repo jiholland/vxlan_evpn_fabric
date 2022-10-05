@@ -1,0 +1,12 @@
+---
+# vars files for vxlan_evpn_fabric
+
+features:
+  - ospf
+  - pim
+  - bgp
+  - nv overlay
+  - interface-vlan
+  - vn-segment-vlan-based
+
+mtu: 9216

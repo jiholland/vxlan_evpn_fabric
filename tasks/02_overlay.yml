@@ -1,0 +1,72 @@
+---
+# tasks file for vxlan_evpn_fabric
+
+- name: Enable EVPN control plane for VXLAN.
+  cisco.nxos.nxos_evpn_global:
+    nv_overlay_evpn: true
+  notify: Save nxos
+
+- name: Configure BGP ASN, Router-ID and neighbors.
+  # noqa no-loop-var-prefix
+  cisco.nxos.nxos_bgp_global:
+    config:
+      as_number: "{{ bgp_asn }}"
+      router_id: "{{ rid_ip }}"
+      log_neighbor_changes: true
+      neighbors:
+        - neighbor_address: "{{ hostvars[item]['rid_ip'] }}"
+          remote_as: "{{ bgp_asn }}"
+          description: "{{ hostvars[item]['inventory_hostname'] }}"
+          update_source: loopback0
+    state: merged
+  when:
+    - hostvars[item]['ansible_host'] != ansible_host
+    - hostvars[item]['bgp_asn'] == bgp_asn
+    - hostvars[item]['bgp_route_reflector'] | default(false) != bgp_route_reflector | default(false)
+  loop: "{{ bgp_neighbors }}"
+  loop_control:
+    label: BGP neighbor {{ hostvars[item]['inventory_hostname'] }}
+  notify: Save nxos
+
+- name: Configure L2VPN EVPN for BGP neighbors. Set address-family to EVPN. Define leafs as RR clients under BGP process.
+  # noqa no-loop-var-prefix
+  cisco.nxos.nxos_bgp_neighbor_address_family:
+    config:
+      as_number: "{{ bgp_asn }}"
+      neighbors:
+        - neighbor_address: "{{ hostvars[item]['rid_ip'] }}"
+          address_family:
+            - afi: l2vpn
+              safi: evpn
+              route_reflector_client: "{{ bgp_route_reflector | default(false) }}"
+              send_community:
+                both: true
+    state: merged
+  when:
+    - hostvars[item]['ansible_host'] != ansible_host
+    - hostvars[item]['bgp_asn'] == bgp_asn
+    - hostvars[item]['bgp_route_reflector'] | default(false) != bgp_route_reflector | default(false)
+  loop: "{{ bgp_neighbors }}"
+  loop_control:
+    label: BGP neighbor {{ hostvars[item]['inventory_hostname'] }}
+  notify: Save nxos
+
+
+- name: VTEP configuration for leafs and border-leafs.
+  when: network_function in ['leaf', 'border-leaf']
+  block:
+
+    - name: Configure anycast gateway MAC address for distributed routing.
+      cisco.nxos.nxos_overlay_global:
+        anycast_gateway_mac: "{{ anycast_gw_mac }}"
+      notify: Save nxos
+
+    - name: Create VXLAN VTEP (NVE) interface for BGP EVPN control plane. Use BGP for host reachability. Enable interface.
+      cisco.nxos.nxos_vxlan_vtep:
+        interface: nve1
+        description: "*** VXLAN VTEP ***"
+        source_interface: loopback1
+        host_reachability: true
+        shutdown: false
+        state: present
+      notify: Save nxos

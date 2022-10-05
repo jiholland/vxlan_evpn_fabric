@@ -1,0 +1,106 @@
+---
+# tasks file for vxlan_evpn_host_segment
+
+- name: Create VLAN and map to VNI.
+  # noqa no-loop-var-prefix
+  cisco.nxos.nxos_vlans:
+    config:
+      - vlan_id: "{{ item.vlan_id }}"
+        name: "{{ item.vlan_name }}"
+        mapped_vni: "{{ item.vni_id }}"
+    state: merged
+  loop: "{{ host_segments_l3 }}"
+  loop_control:
+    label: VLAN {{ item.vlan_id }}, VNI {{ item.vni_id }}
+  notify: Save nxos
+
+- name: Create VLAN SVI for VNI.
+  # noqa no-loop-var-prefix
+  cisco.nxos.nxos_interfaces:
+    config:
+      - name: Vlan{{ item.vlan_id }}
+        enabled: true
+    state: merged
+  loop: "{{ host_segments_l3 }}"
+  loop_control:
+    label: VNI {{ item.vni_id }}
+  notify: Save nxos
+
+- name: Create and associate SVI to tenant VRF.
+  # noqa no-loop-var-prefix
+  cisco.nxos.nxos_vrf_interface:
+    vrf: "{{ item.vrf }}"
+    interface: Vlan{{ item.vlan_id }}
+    state: present
+  loop: "{{ host_segments_l3 }}"
+  loop_control:
+    label: VRF {{ item.vrf }}, VNI {{ item.vni_id }}
+  notify: Save nxos
+
+- name: Enable anycast gateway in SVI. Ensure jumbo MTU. Ensure interface description.
+  # noqa no-loop-var-prefix
+  cisco.nxos.nxos_interfaces:
+    config:
+      - name: Vlan{{ item.vlan_id }}
+        description: "{{ item.vlan_svi_description }}"
+        mtu: "{{ mtu }}"
+        fabric_forwarding_anycast_gateway: true
+        enabled: true
+    state: merged
+  loop: "{{ host_segments_l3 }}"
+  loop_control:
+    label: VNI {{ item.vni_id }}
+  notify: Save nxos
+
+- name: Set IP address on SVI.
+  # noqa no-loop-var-prefix
+  cisco.nxos.nxos_l3_interfaces:
+    config:
+      - name: Vlan{{ item.vlan_id }}
+        ipv4:
+          - address: "{{ item.vlan_svi_ip }}"
+        redirects: false
+    state: merged
+  loop: "{{ host_segments_l3 }}"
+  loop_control:
+    label: VNI {{ item.vni_id }}, IP address {{ item.vlan_svi_ip }}
+  notify: Save nxos
+
+- name: Configure VNI for EVPN.
+  # noqa no-loop-var-prefix
+  cisco.nxos.nxos_evpn_vni:
+    vni: "{{ item.vni_id }}"
+    route_distinguisher: auto
+    route_target_both: auto
+    state: present
+  loop: "{{ host_segments_l3 }}"
+  loop_control:
+    label: VNI {{ item.vni_id }}
+  notify: Save nxos
+
+- name: Map VNI to VXLAN VTEP interface and multicast-group for BUM replication. Suppress ARP.
+  # noqa no-loop-var-prefix
+  cisco.nxos.nxos_vxlan_vtep_vni:
+    interface: nve1
+    vni: "{{ item.vni_id }}"
+    ingress_replication: default
+    multicast_group: "{{ item.mcast_group }}"
+    suppress_arp: true
+    state: present
+  loop: "{{ host_segments_l3 }}"
+  loop_control:
+    label: VNI {{ item.vni_id }}
+  notify: Save nxos
+
+- name: Enable multisite ingress replication at border-leafs.
+  # noqa no-loop-var-prefix
+  cisco.nxos.nxos_vxlan_vtep_vni:
+    interface: nve1
+    vni: "{{ item.vni_id }}"
+    multisite_ingress_replication: "{{ item.multisite }}"  # Multisite BUM is always ingress replicated
+    state: present
+  when: network_function == 'border-leaf'
+  loop: "{{ host_segments_l3 }}"
+  loop_control:
+    label: VNI {{ item.vni_id }}
+  notify: Save nxos

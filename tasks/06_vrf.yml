@@ -1,0 +1,109 @@
+---
+# tasks file for vxlan_evpn_fabric
+
+- name: Create VLAN dedicated for routing in overlay.
+        Map VLAN to VNI (one dedicated VLAN and VNI per VRF).
+  # noqa no-loop-var-prefix
+  cisco.nxos.nxos_vlans:
+    config:
+      - vlan_id: "{{ item.vlan_id }}"
+        name: "{{ item.vlan_name }}"
+        mapped_vni: "{{ item.vni_id }}"
+        enabled: true
+    state: merged
+  loop: "{{ vrfs }}"
+  loop_control:
+    label: VLAN {{ item.vlan_id }}, VNI {{ item.vni_id }}
+  notify: Save nxos
+
+- name: Create VRF context and associate to VNI.
+  # noqa no-loop-var-prefix
+  cisco.nxos.nxos_vrf:
+    name: "{{ item.vrf_name }}"
+    description: "{{ item.vrf_description }}"
+    vni: "{{ item.vni_id }}"
+    rd: auto
+    admin_state: up
+    state: present
+  loop: "{{ vrfs }}"
+  loop_control:
+    label: VRF {{ item.vrf_name }}, VNI {{ item.vni_id }}
+  notify: Save nxos
+
+- name: Configure VRF address-family.
+  # noqa no-loop-var-prefix
+  cisco.nxos.nxos_vrf_af:
+    vrf: "{{ item.vrf_name }}"
+    afi: ipv4
+    route_target_both_auto_evpn: true
+    state: present
+  loop: "{{ vrfs }}"
+  loop_control:
+    label: VRF {{ item.vrf_name }}
+  notify: Save nxos
+
+- name: Create VLAN SVI.
+  # noqa no-loop-var-prefix
+  cisco.nxos.nxos_interfaces:
+    config:
+      - name: Vlan{{ item.vlan_id }}
+        enabled: true
+    state: merged
+  loop: "{{ vrfs }}"
+  loop_control:
+    label: VLAN SVI {{ item.vlan_id }}
+  notify: Save nxos
+
+- name: Associate VLAN SVI to VRF context.
+  # noqa no-loop-var-prefix
+  cisco.nxos.nxos_vrf_interface:
+    vrf: "{{ item.vrf_name }}"
+    interface: Vlan{{ item.vlan_id }}
+    state: present
+  loop: "{{ vrfs }}"
+  loop_control:
+    label: VRF {{ item.vrf_name }}, VLAN SVI {{ item.vlan_id }}
+  notify: Save nxos
+
+- name: Enable IP forwarding and jumpo MTU for VLAN SVI.
+  # noqa no-loop-var-prefix
+  cisco.nxos.nxos_interfaces:
+    config:
+      - name: Vlan{{ item.vlan_id }}
+        description: "{{ item.vlan_svi_description }}"
+        ip_forward: true
+        mtu: "{{ mtu }}"
+        enabled: true
+    state: merged
+  loop: "{{ vrfs }}"
+  loop_control:
+    label: VLAN {{ item.vlan_id }}
+  notify: Save nxos
+
+- name: Map VNI to VXLAN VTEP interface and associate to VRF.
+  # noqa no-loop-var-prefix
+  cisco.nxos.nxos_vxlan_vtep_vni:
+    interface: nve1
+    vni: "{{ item.vni_id }}"
+    assoc_vrf: true
+    state: present
+  loop: "{{ vrfs }}"
+  loop_control:
+    label: VNI {{ item.vni_id }}
+  notify: Save nxos
+
+- name: Configure VRF under BGP process.
+  # noqa no-loop-var-prefix
+  cisco.nxos.nxos_bgp_address_family:
+    config:
+      as_number: "{{ bgp_asn }}"
+      address_family:
+        - afi: ipv4
+          safi: unicast
+          vrf: "{{ item.vrf_name }}"
+          advertise_l2vpn_evpn: true
+    state: merged
+  loop: "{{ vrfs }}"
+  loop_control:
+    label: VRF {{ item.vrf_name }}
+  notify: Save nxos

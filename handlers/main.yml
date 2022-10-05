@@ -1,0 +1,9 @@
+---
+# handler for saving the configuration
+
+- name: Save nxos
+  cisco.nxos.nxos_config:
+    save_when: always
+  when:
+    - not ansible_check_mode
+    - ansible_network_os == 'cisco.nxos.nxos'
