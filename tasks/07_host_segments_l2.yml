@@ -2,7 +2,7 @@
 # tasks file for vxlan_evpn_host_segment
 
 - name: Create VLAN and map to VNI.
-  # noqa no-loop-var-prefix
+  # noqa loop-var-prefix
   cisco.nxos.nxos_vlans:
     config:
       - vlan_id: "{{ item.vlan_id }}"
@@ -15,7 +15,7 @@
   notify: Save nxos
 
 - name: Configure VNI for EVPN.
-  # noqa no-loop-var-prefix
+  # noqa loop-var-prefix
   cisco.nxos.nxos_evpn_vni:
     vni: "{{ item.vni_id }}"
     route_distinguisher: auto
@@ -27,7 +27,7 @@
   notify: Save nxos
 
 - name: Map VNI to VXLAN VTEP interface and multicast-group for BUM replication. Disable ARP suppression.
-  # noqa no-loop-var-prefix
+  # noqa loop-var-prefix
   cisco.nxos.nxos_vxlan_vtep_vni:
     interface: nve1
     vni: "{{ item.vni_id }}"
@@ -41,7 +41,7 @@
   notify: Save nxos
 
 - name: Enable multisite ingress replication at border-leafs.
-  # noqa no-loop-var-prefix
+  # noqa loop-var-prefix
   cisco.nxos.nxos_vxlan_vtep_vni:
     interface: nve1
     vni: "{{ item.vni_id }}"

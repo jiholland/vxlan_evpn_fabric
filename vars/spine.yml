@@ -5,15 +5,25 @@ bgp_route_reflector: true
 pim_rp: true
 
 fabric_interfaces:
-
   - name: loopback0
     description: "*** RID AND OSPF/BGP-PEERING ***"
     ip: "{{ rid_ip }}/32"
-
   - name: loopback254
     description: "*** PIM ANYCAST RP ***"
     ip: "{{ pim_anycast_rp_ip }}/32"
-
-  - name: Ethernet1/52
-  - name: Ethernet1/53
-  - name: Ethernet1/54
+  - name: Ethernet1/1
+  - name: Ethernet1/2
+  - name: Ethernet1/3
+  - name: Ethernet1/4
+  - name: Ethernet1/5
+  - name: Ethernet1/6
+  - name: Ethernet1/7
+  - name: Ethernet1/8
+  - name: Ethernet1/9
+  - name: Ethernet1/10
+  - name: Ethernet1/11
+  - name: Ethernet1/12
+  - name: Ethernet1/13
+  - name: Ethernet1/14
+  - name: Ethernet1/15
+  - name: Ethernet1/16

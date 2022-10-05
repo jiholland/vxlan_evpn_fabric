@@ -38,6 +38,7 @@
 <img src="./files/vxlan_evpn_host_segment_l3.png" alt="L2 Host Segment" width="600"/>
 
 👇 **Broadcast, unknown Unicast and Multicast:**<br>
+- Multisite BUM is always ingress replicate (unicast).
 <img src="./files/vxlan_evpn_bum.png" alt="BUM traffic" width="600"/>
 
 📚 **Resources:**

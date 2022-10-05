@@ -17,7 +17,7 @@
   notify: Save nxos
 
 - name: Configure remote border-leafs as neighbors. Ensure peer-type is fabric-external. Increase ttl for eBGP.  # since using loopback as source.
-  # noqa no-loop-var-prefix
+  # noqa loop-var-prefix
   cisco.nxos.nxos_bgp_global:
     config:
       as_number: "{{ bgp_asn }}"
@@ -39,7 +39,7 @@
   notify: Save nxos
 
 - name: Configure EVPN address-family for BGP neighbors.
-  # noqa no-loop-var-prefix
+  # noqa loop-var-prefix
   cisco.nxos.nxos_bgp_neighbor_address_family:
     config:
       as_number: "{{ bgp_asn }}"
@@ -79,7 +79,7 @@
   notify: Save nxos
 
 - name: Ensure dci-tracking on fabric-external interfaces.
-  # noqa no-loop-var-prefix
+  # noqa loop-var-prefix
   cisco.nxos.nxos_l3_interfaces:
     config:
       - name: "{{ item.name }}"
@@ -91,7 +91,7 @@
   notify: Save nxos
 
 - name: Ensure fabric-tracking on fabric-internal interfaces.
-  # noqa no-loop-var-prefix
+  # noqa loop-var-prefix
   cisco.nxos.nxos_l3_interfaces:
     config:
       - name: "{{ item.name }}"
@@ -104,7 +104,7 @@
   notify: Save nxos
 
 - name: Ensure EVPN multisite storm suppression for DCI interfaces.
-  # noqa no-loop-var-prefix
+  # noqa loop-var-prefix
   cisco.nxos.nxos_config:
     lines:
       - evpn storm-control {{ item }} level 5

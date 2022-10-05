@@ -7,7 +7,7 @@
   notify: Save nxos
 
 - name: Configure BGP ASN, Router-ID and neighbors.
-  # noqa no-loop-var-prefix
+  # noqa loop-var-prefix
   cisco.nxos.nxos_bgp_global:
     config:
       as_number: "{{ bgp_asn }}"
@@ -29,7 +29,7 @@
   notify: Save nxos
 
 - name: Configure L2VPN EVPN for BGP neighbors. Set address-family to EVPN. Define leafs as RR clients under BGP process.
-  # noqa no-loop-var-prefix
+  # noqa loop-var-prefix
   cisco.nxos.nxos_bgp_neighbor_address_family:
     config:
       as_number: "{{ bgp_asn }}"

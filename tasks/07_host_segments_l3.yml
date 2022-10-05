@@ -2,7 +2,7 @@
 # tasks file for vxlan_evpn_host_segment
 
 - name: Create VLAN and map to VNI.
-  # noqa no-loop-var-prefix
+  # noqa loop-var-prefix
   cisco.nxos.nxos_vlans:
     config:
       - vlan_id: "{{ item.vlan_id }}"
@@ -15,7 +15,7 @@
   notify: Save nxos
 
 - name: Create VLAN SVI for VNI.
-  # noqa no-loop-var-prefix
+  # noqa loop-var-prefix
   cisco.nxos.nxos_interfaces:
     config:
       - name: Vlan{{ item.vlan_id }}
@@ -27,7 +27,7 @@
   notify: Save nxos
 
 - name: Create and associate SVI to tenant VRF.
-  # noqa no-loop-var-prefix
+  # noqa loop-var-prefix
   cisco.nxos.nxos_vrf_interface:
     vrf: "{{ item.vrf }}"
     interface: Vlan{{ item.vlan_id }}
@@ -38,7 +38,7 @@
   notify: Save nxos
 
 - name: Enable anycast gateway in SVI. Ensure jumbo MTU. Ensure interface description.
-  # noqa no-loop-var-prefix
+  # noqa loop-var-prefix
   cisco.nxos.nxos_interfaces:
     config:
       - name: Vlan{{ item.vlan_id }}
@@ -53,7 +53,7 @@
   notify: Save nxos
 
 - name: Set IP address on SVI.
-  # noqa no-loop-var-prefix
+  # noqa loop-var-prefix
   cisco.nxos.nxos_l3_interfaces:
     config:
       - name: Vlan{{ item.vlan_id }}
@@ -67,7 +67,7 @@
   notify: Save nxos
 
 - name: Configure VNI for EVPN.
-  # noqa no-loop-var-prefix
+  # noqa loop-var-prefix
   cisco.nxos.nxos_evpn_vni:
     vni: "{{ item.vni_id }}"
     route_distinguisher: auto
@@ -79,7 +79,7 @@
   notify: Save nxos
 
 - name: Map VNI to VXLAN VTEP interface and multicast-group for BUM replication. Suppress ARP.
-  # noqa no-loop-var-prefix
+  # noqa loop-var-prefix
   cisco.nxos.nxos_vxlan_vtep_vni:
     interface: nve1
     vni: "{{ item.vni_id }}"
@@ -93,7 +93,7 @@
   notify: Save nxos
 
 - name: Enable multisite ingress replication at border-leafs.
-  # noqa no-loop-var-prefix
+  # noqa loop-var-prefix
   cisco.nxos.nxos_vxlan_vtep_vni:
     interface: nve1
     vni: "{{ item.vni_id }}"

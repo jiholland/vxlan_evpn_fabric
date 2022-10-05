@@ -2,14 +2,14 @@
 # tasks file for vxlan_evpn_fabric
 
 - name: Enable MACsec features.
-  # noqa no-loop-var-prefix
+  # noqa loop-var-prefix
   cisco.nxos.nxos_feature:
     feature: macsec
     state: enabled
   notify: Save nxos
 
 - name: Configure MACsec keychain and key.
-  # noqa no-loop-var-prefix
+  # noqa loop-var-prefix
   cisco.nxos.nxos_command:
     commands:
       - "{{ item }}"
@@ -22,7 +22,7 @@
   notify: Save nxos
 
 - name: Apply MACsec policy to DCI-interfaces.
-  # noqa no-loop-var-prefix
+  # noqa loop-var-prefix
   cisco.nxos.nxos_config:
     lines:
       - macsec keychain 1 policy system-default-macsec-policy

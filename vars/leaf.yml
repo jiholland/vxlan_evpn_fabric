@@ -12,5 +12,4 @@ fabric_interfaces:
     ip: "{{ vtep_ip }}/32"
 
   - name: Ethernet1/53  # to RR (spine)
-
   - name: Ethernet1/54  # to RR (spine)

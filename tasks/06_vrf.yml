@@ -3,7 +3,7 @@
 
 - name: Create VLAN dedicated for routing in overlay.
         Map VLAN to VNI (one dedicated VLAN and VNI per VRF).
-  # noqa no-loop-var-prefix
+  # noqa loop-var-prefix
   cisco.nxos.nxos_vlans:
     config:
       - vlan_id: "{{ item.vlan_id }}"
@@ -17,7 +17,7 @@
   notify: Save nxos
 
 - name: Create VRF context and associate to VNI.
-  # noqa no-loop-var-prefix
+  # noqa loop-var-prefix
   cisco.nxos.nxos_vrf:
     name: "{{ item.vrf_name }}"
     description: "{{ item.vrf_description }}"
@@ -31,7 +31,7 @@
   notify: Save nxos
 
 - name: Configure VRF address-family.
-  # noqa no-loop-var-prefix
+  # noqa loop-var-prefix
   cisco.nxos.nxos_vrf_af:
     vrf: "{{ item.vrf_name }}"
     afi: ipv4
@@ -43,7 +43,7 @@
   notify: Save nxos
 
 - name: Create VLAN SVI.
-  # noqa no-loop-var-prefix
+  # noqa loop-var-prefix
   cisco.nxos.nxos_interfaces:
     config:
       - name: Vlan{{ item.vlan_id }}
@@ -55,7 +55,7 @@
   notify: Save nxos
 
 - name: Associate VLAN SVI to VRF context.
-  # noqa no-loop-var-prefix
+  # noqa loop-var-prefix
   cisco.nxos.nxos_vrf_interface:
     vrf: "{{ item.vrf_name }}"
     interface: Vlan{{ item.vlan_id }}
@@ -66,7 +66,7 @@
   notify: Save nxos
 
 - name: Enable IP forwarding and jumpo MTU for VLAN SVI.
-  # noqa no-loop-var-prefix
+  # noqa loop-var-prefix
   cisco.nxos.nxos_interfaces:
     config:
       - name: Vlan{{ item.vlan_id }}
@@ -81,7 +81,7 @@
   notify: Save nxos
 
 - name: Map VNI to VXLAN VTEP interface and associate to VRF.
-  # noqa no-loop-var-prefix
+  # noqa loop-var-prefix
   cisco.nxos.nxos_vxlan_vtep_vni:
     interface: nve1
     vni: "{{ item.vni_id }}"
@@ -93,7 +93,7 @@
   notify: Save nxos
 
 - name: Configure VRF under BGP process.
-  # noqa no-loop-var-prefix
+  # noqa loop-var-prefix
   cisco.nxos.nxos_bgp_address_family:
     config:
       as_number: "{{ bgp_asn }}"

@@ -14,7 +14,7 @@
     file: "{{ network_function }}.yml"
 
 - name: Enable features.
-  # noqa no-loop-var-prefix
+  # noqa loop-var-prefix
   tags: fabric_underlay, fabric_overlay
   cisco.nxos.nxos_feature:
     feature: "{{ item }}"
