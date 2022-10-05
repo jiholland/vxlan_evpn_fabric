@@ -104,7 +104,7 @@ hostvars/border-leaf.yml:
 Dependencies
 ------------
 
-💿 [cisco\_nxos\_vpc](enter link her)
+💿 [cisco\_nxos\_vpc](https://galaxy.ansible.com/jiholland/cisco_nxos_vpc)
 
 Example Playbook
 ----------------
