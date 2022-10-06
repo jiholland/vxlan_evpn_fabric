@@ -2,7 +2,7 @@
 ======================
 
 🪄  Configure VXLAN fabric with EVPN controller in clos-topology on Cisco NXOS platform.<br>
-🧪  Tested on Cisco Nexus 93180YC-FX.
+🧪  Tested on Cisco Nexus C93180YC-FX and C92348GC-X.
 
 👇 **Underlay:**
 - OSPF routing.

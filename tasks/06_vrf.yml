@@ -65,7 +65,7 @@
     label: VRF {{ item.vrf_name }}, VLAN SVI {{ item.vlan_id }}
   notify: Save nxos
 
-- name: Enable IP forwarding and jumpo MTU for VLAN SVI.
+- name: Enable IP forwarding and jumbo MTU for VLAN SVI.
   # noqa loop-var-prefix
   cisco.nxos.nxos_interfaces:
     config:
