@@ -3,11 +3,7 @@ galaxy_info:
   role_name: vxlan_evpn_fabric
   standalone: true
   author: Jørn Ivar Holland
-  description: |-
-     Configure VXLAN fabric with EVPN controller in clos-topology on Cisco NXOS platform.
-     OSFP, P2P L3 links and PIM sparse Anycast RP in the fabric underlay.
-     iBGP EVPN control plane in the fabric overlay with multicast for BUM-handeling.
-     Border-leafs at each site in vPC using eBGP in both the underlay and overlay for DCI.
+  description: Configure VXLAN EVPN fabric in multisite clos-network on Cisco NXOS platform.
   license: BSD-3-Clause
   min_ansible_version: '2.9'
   platforms:

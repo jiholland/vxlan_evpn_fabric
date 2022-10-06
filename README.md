@@ -1,8 +1,8 @@
 🏭 vxlan\_evpn\_fabric
 ======================
 
-🪄  Configure VXLAN fabric with EVPN controller in clos-topology on Cisco NXOS platform.<br>
-🧪  Tested on Cisco Nexus C93180YC-FX and C92348GC-X.
+🪄 Configure VXLAN EVPN fabric in multisite clos-network on Cisco NXOS platform.<br>
+🧪 Tested on Cisco Nexus C93180YC-FX and C92348GC-X.
 
 👇 **Underlay:**
 - OSPF routing.
