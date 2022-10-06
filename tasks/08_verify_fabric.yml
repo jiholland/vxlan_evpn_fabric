@@ -87,3 +87,21 @@
         msg:
           - show bgp l2vpn evpn summary
           - "{{ evpn_bgp_neighbors['stdout_lines'][0] }}"
+
+
+- name: Verify the VXLAN configuration.
+  when: network_function in ['leaf','border-leaf']
+  block:
+
+    - name: Get VXLAN config.
+      cisco.nxos.nxos_command:
+        commands:
+          - show consistency-checker vxlan config-check
+      register: config_check
+      vars:
+        ansible_command_timeout: 60
+
+    - name: Print config-check
+      ansible.builtin.debug:
+        msg:
+          - show consistency-checker vxlan config-check
