@@ -90,10 +90,17 @@
 
 
 - name: Verify the VXLAN configuration.
-  when: network_function in ['leaf','border-leaf']
+  when: network_function in ['leaf', 'border-leaf']
   block:
 
-    - name: Get VXLAN config.
+    - name: Print information about the next task.
+      ansible.builtin.debug:
+        msg:
+          - "Next task: Run VXLAN config-check."
+          - "Timeout is 60 seconds"
+      run_once: true
+
+    - name: Run VXLAN config-check.
       cisco.nxos.nxos_command:
         commands:
           - show consistency-checker vxlan config-check
@@ -101,7 +108,8 @@
       vars:
         ansible_command_timeout: 60
 
-    - name: Print config-check
+    - name: Print VXLAN config-check.
       ansible.builtin.debug:
         msg:
           - show consistency-checker vxlan config-check
+          - "{{ config_check['stdout_lines'][0] }}"
