@@ -72,7 +72,7 @@ hostvars/[leaf,border-leaf].yml:
 
 hostvars/border-leaf.yml:
 - vtep\_vpc\_vip
-- nve\_infra\_vlan
+- nve\_infra\_ip
 - dci\_vip
 - dci\_interfaces
   - name
