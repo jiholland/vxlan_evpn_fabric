@@ -6,10 +6,6 @@ nve_infra_vlan_id: 777  # For vPC.
 rmap_redist_direct_name: RMAP-REDIST-DIRECT
 rmap_redist_direct_tag: 54321
 
-loopback_rid: loopback0
-loopback_nve: loopback1
-loopback_dci: loopback100
-
 fabric_interfaces:
   - name: "{{ loopback_rid }}"
     description: "*** RID AND OSPF/BGP-PEERING ***"

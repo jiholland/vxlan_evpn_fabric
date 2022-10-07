@@ -4,9 +4,6 @@
 bgp_route_reflector: true
 pim_rp: true
 
-loopback_rid: loopback0
-loopback_pim: loopback254
-
 fabric_interfaces:
   - name: "{{ loopback_rid }}"
     description: "*** RID AND OSPF/BGP-PEERING ***"

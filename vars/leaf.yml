@@ -1,9 +1,6 @@
 ---
 # vars file for LEAFs
 
-loopback_rid: loopback0
-loopback_nve: loopback1
-
 fabric_interfaces:
   - name: "{{ loopback_rid }}"
     description: "*** RID AND OSPF/BGP-PEERING ***"

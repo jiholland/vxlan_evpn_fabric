@@ -61,33 +61,10 @@ defaults/main.yml:
 - vrfs
 - host\_segments\_l3
 - host\_segments\_l2
-
-vars/main.yml:
-- features
-- mtu
-- ospf\_area\_id
-- ospf\_process\_id
-- anycast\_gw\_mac
-
-vars/[spine,leaf,border-leaf].yml:
-- fabric\_interfaces
 - loopback\_rid
-
-vars/spine.yml:
-- bgp\_route\_reflector
-- pim\_rp
-- loopback\_pim
-
-vars/leaf\_yml:
-- loopback\_nve
-
-vars/border-leaf.yml:
-- rmap\_redist\_direct\_name
-- rmap\_redist\_direct\_tag
-- macsec\_key
-- nve\_infra\_vlan
 - loopback\_nve
 - loopback\_dci
+- loopback\_pim
 
 hostvars/[spine,leaf,border-leaf].yml:
 - location
