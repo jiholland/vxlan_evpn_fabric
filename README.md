@@ -61,13 +61,8 @@ defaults/main.yml:
 - vrfs
 - host\_segments\_l3
 - host\_segments\_l2
-- loopback\_rid
-- loopback\_nve
-- loopback\_dci
-- loopback\_pim
 
 hostvars/[spine,leaf,border-leaf].yml:
-- location
 - network\_function
 - bgp\_asn
 - rid\_ip

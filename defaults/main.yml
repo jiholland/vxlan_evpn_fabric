@@ -7,11 +7,6 @@ pim_anycast_rp_set: "{{ bgp_neighbors }}"
 pim_anycast_rp_ip: 10.254.254.254
 pim_group_range: 239.239.0.0/16
 
-loopback_rid: loopback0                                  # RID AND OSPF/BGP-PEERING
-loopback_nve: loopback1                                  # NVE INTERFACE (PIP VTEP)
-loopback_dci: loopback100                                # MULTI-SITE INTERFACE (VIP VTEP)
-loopback_pim: loopback254                                # PIM ANYCAST RP
-
 vrfs:
   - vrf_name: Tenant-1
     vrf_description: "*** VRF for Tenant-1 ***"

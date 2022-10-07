@@ -15,3 +15,8 @@ ospf_area_id: 0.0.0.0
 ospf_process_id: UNDERLAY
 
 anycast_gw_mac: 2020.DEAD.BEEF
+
+loopback_rid: loopback0    # RID AND OSPF/BGP-PEERING
+loopback_nve: loopback1    # NVE INTERFACE (PIP VTEP)
+loopback_dci: loopback100  # MULTI-SITE INTERFACE (VIP VTEP)
+loopback_pim: loopback254  # PIM ANYCAST RP
