@@ -6,25 +6,25 @@ nve_infra_vlan_id: 777  # For vPC.
 rmap_redist_direct_name: RMAP-REDIST-DIRECT
 rmap_redist_direct_tag: 54321
 
-fabric_interfaces:
+loopback_rid: loopback0
+loopback_nve: loopback1
+loopback_dci: loopback100
 
-  - name: loopback0
+fabric_interfaces:
+  - name: "{{ loopback_rid }}"
     description: "*** RID AND OSPF/BGP-PEERING ***"
     ip: "{{ rid_ip }}/32"
     tag: "{{ rmap_redist_direct_tag }}"
-
-  - name: loopback1
+  - name: "{{ loopback_nve }}"
     description: "*** NVE INTERFACE (PIP VTEP) ***"
     ip: "{{ vtep_ip }}/32"
     secondary_ip: "{{ vtep_vpc_vip }}/32"  # Required for vPC
     tag: "{{ rmap_redist_direct_tag }}"
-
-  - name: loopback100
+  - name: "{{ loopback_dci }}"
     description: "*** MULTI-SITE INTERFACE (VIP VTEP) ***"
     ip: "{{ dci_vip }}/32"
     tag: "{{ rmap_redist_direct_tag }}"
     pim_sparse: false
-
   - name: Ethernet1/49   # to RR (spine)
   - name: Ethernet1/50   # to RR (spine)
 

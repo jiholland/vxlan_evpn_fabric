@@ -4,11 +4,14 @@
 bgp_route_reflector: true
 pim_rp: true
 
+loopback_rid: loopback0
+loopback_pim: loopback254
+
 fabric_interfaces:
-  - name: loopback0
+  - name: "{{ loopback_rid }}"
     description: "*** RID AND OSPF/BGP-PEERING ***"
     ip: "{{ rid_ip }}/32"
-  - name: loopback254
+  - name: "{{ loopback_pim }}"
     description: "*** PIM ANYCAST RP ***"
     ip: "{{ pim_anycast_rp_ip }}/32"
   - name: Ethernet1/1
