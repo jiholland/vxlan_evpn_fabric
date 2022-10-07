@@ -12,7 +12,7 @@
 - name: Add multisite VIP VTEP loopback to NVE-interface.
   cisco.nxos.nxos_vxlan_vtep:
     interface: nve1
-    multisite_border_gateway_interface: loopback100
+    multisite_border_gateway_interface: "{{ loopback_dci }}"
     state: present
   notify: Save nxos
 
@@ -26,7 +26,7 @@
         - neighbor_address: "{{ hostvars[item]['rid_ip'] }}"
           remote_as: "{{ hostvars[item]['bgp_asn'] }}"
           description: "{{ hostvars[item]['inventory_hostname'] }}"
-          update_source: loopback0
+          update_source: "{{ loopback_rid }}"
           peer_type: fabric-external
           ebgp_multihop: 2
     state: merged

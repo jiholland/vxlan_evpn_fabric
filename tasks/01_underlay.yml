@@ -66,7 +66,7 @@
   cisco.nxos.nxos_config:
     lines:
       - medium p2p
-      - ip unnumbered loopback0
+      - ip unnumbered {{ loopback_rid }}
     parents:
       - interface {{ item.name }}
   when: "'Ethernet' in item.name"
