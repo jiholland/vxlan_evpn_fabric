@@ -137,7 +137,7 @@
 Requirements
 ------------
 
-💿 [Cisco NXOS Collection](https://galaxy.ansible.com/cisco/nxos)
+💿 [Cisco NXOS Collection](https://galaxy.ansible.com/cisco/nxos)<br>
 🧪 Tested on Cisco Nexus C93180YC-FX and C92348GC-X.
 
 Role Variables
