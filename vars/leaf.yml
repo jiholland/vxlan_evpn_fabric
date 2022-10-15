@@ -2,10 +2,10 @@
 # vars file for LEAFs
 
 fabric_interfaces:
-  - name: "{{ loopback_rid }}"
+  - name: "{{ rid_loopback }}"
     description: "*** RID AND OSPF/BGP-PEERING ***"
     ip: "{{ rid_ip }}/32"
-  - name: "{{ loopback_nve }}"
+  - name: "{{ vtep_loopback }}"
     description: "*** NVE INTERFACE (PIP VTEP) ***"
     ip: "{{ vtep_ip }}/32"
   - name: Ethernet1/53  # to RR (spine)

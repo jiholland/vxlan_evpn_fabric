@@ -2,7 +2,6 @@
 # tasks file for vxlan_evpn_fabric
 
 - name: Create and enable L3 loopback fabric interfaces. Ensure interface-description.
-  # noqa loop-var-prefix
   cisco.nxos.nxos_interfaces:
     config:
       - name: "{{ item.name }}"
@@ -16,7 +15,6 @@
   notify: Save nxos
 
 - name: Enable and set physical fabric interfaces in L3 mode. Ensure jumbo MTU.
-  # noqa loop-var-prefix
   cisco.nxos.nxos_interfaces:
     config:
       - name: "{{ item.name }}"
@@ -31,7 +29,6 @@
   notify: Save nxos
 
 - name: Assign IP address and tag to L3 loopback fabric interfaces.
-  # noqa loop-var-prefix
   cisco.nxos.nxos_l3_interfaces:
     config:
       - name: "{{ item.name }}"
@@ -46,7 +43,6 @@
   notify: Save nxos
 
 - name: Assign secondary IP address (anycast) to loopback fabric interface used for VXLAN VTEP.  # Required for vPC.
-  # noqa loop-var-prefix
   cisco.nxos.nxos_l3_interfaces:
     config:
       - name: "{{ item.name }}"
@@ -62,11 +58,10 @@
   notify: Save nxos
 
 - name: Ensure physical L3 fabric interfaces have medium p2p and IP unnumbered parameters.
-  # noqa loop-var-prefix
   cisco.nxos.nxos_config:
     lines:
       - medium p2p
-      - ip unnumbered {{ loopback_rid }}
+      - ip unnumbered {{ rid_loopback }}
     parents:
       - interface {{ item.name }}
   when: "'Ethernet' in item.name"
@@ -87,7 +82,6 @@
   notify: Save nxos
 
 - name: Associate L3 fabric interfaces with OSFP process.
-  # noqa loop-var-prefix
   cisco.nxos.nxos_ospf_interfaces:
     config:
       - name: "{{ item.name }}"
@@ -105,7 +99,6 @@
   notify: Save nxos
 
 - name: Configure PIM RP in Anycast-RP set.
-  # noqa loop-var-prefix
   cisco.nxos.nxos_config:
     lines:
       - ip pim anycast-rp {{ pim_anycast_rp_ip }} {{ hostvars[item]['rid_ip'] }}
@@ -124,7 +117,6 @@
   notify: Save nxos
 
 - name: Ensure PIM sparse mode is running on L3 fabric interfaces.
-  # noqa loop-var-prefix
   cisco.nxos.nxos_pim_interface:
     interface: "{{ item.name }}"
     sparse: true

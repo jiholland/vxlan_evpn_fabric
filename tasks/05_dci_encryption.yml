@@ -2,14 +2,12 @@
 # tasks file for vxlan_evpn_fabric
 
 - name: Enable MACsec features.
-  # noqa loop-var-prefix
   cisco.nxos.nxos_feature:
     feature: macsec
     state: enabled
   notify: Save nxos
 
 - name: Configure MACsec keychain and key.
-  # noqa loop-var-prefix
   cisco.nxos.nxos_command:
     commands:
       - "{{ item }}"
@@ -17,12 +15,11 @@
     - configure terminal
     - key chain 1 macsec
     - key 1000
-    - key-octet-string {{ macsec_key }} cryptographic-algorithm AES_256_CMAC
+    - key-octet-string {{ dci_macsec_key }} cryptographic-algorithm AES_256_CMAC
   no_log: true
   notify: Save nxos
 
 - name: Apply MACsec policy to DCI-interfaces.
-  # noqa loop-var-prefix
   cisco.nxos.nxos_config:
     lines:
       - macsec keychain 1 policy system-default-macsec-policy

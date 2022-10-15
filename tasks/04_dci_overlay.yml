@@ -12,12 +12,11 @@
 - name: Add multisite VIP VTEP loopback to NVE-interface.
   cisco.nxos.nxos_vxlan_vtep:
     interface: nve1
-    multisite_border_gateway_interface: "{{ loopback_dci }}"
+    multisite_border_gateway_interface: "{{ dci_loopback }}"
     state: present
   notify: Save nxos
 
 - name: Configure remote border-leafs as neighbors. Ensure peer-type is fabric-external. Increase ttl for eBGP.  # since using loopback as source.
-  # noqa loop-var-prefix
   cisco.nxos.nxos_bgp_global:
     config:
       as_number: "{{ bgp_asn }}"
@@ -26,7 +25,7 @@
         - neighbor_address: "{{ hostvars[item]['rid_ip'] }}"
           remote_as: "{{ hostvars[item]['bgp_asn'] }}"
           description: "{{ hostvars[item]['inventory_hostname'] }}"
-          update_source: "{{ loopback_rid }}"
+          update_source: "{{ rid_loopback }}"
           peer_type: fabric-external
           ebgp_multihop: 2
     state: merged
@@ -39,7 +38,6 @@
   notify: Save nxos
 
 - name: Configure EVPN address-family for BGP neighbors.
-  # noqa loop-var-prefix
   cisco.nxos.nxos_bgp_neighbor_address_family:
     config:
       as_number: "{{ bgp_asn }}"
@@ -79,7 +77,6 @@
   notify: Save nxos
 
 - name: Ensure dci-tracking on fabric-external interfaces.
-  # noqa loop-var-prefix
   cisco.nxos.nxos_l3_interfaces:
     config:
       - name: "{{ item.name }}"
@@ -91,7 +88,6 @@
   notify: Save nxos
 
 - name: Ensure fabric-tracking on fabric-internal interfaces.
-  # noqa loop-var-prefix
   cisco.nxos.nxos_l3_interfaces:
     config:
       - name: "{{ item.name }}"
@@ -104,7 +100,6 @@
   notify: Save nxos
 
 - name: Ensure EVPN multisite storm suppression for DCI interfaces.
-  # noqa loop-var-prefix
   cisco.nxos.nxos_config:
     lines:
       - evpn storm-control {{ item }} level 5

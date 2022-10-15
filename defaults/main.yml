@@ -1,11 +1,13 @@
 ---
 # defaults files for vxlan_evpn_fabric
 
-bgp_neighbors: "{{ groups['VXLAN_EVPN_FABRIC'] }}"       # CHANGE_ME
+bgp_neighbors: "{{ groups['VXLAN_EVPN_FABRIC'] }}"       # Group from inventory
 pim_anycast_rp_set: "{{ bgp_neighbors }}"
 
 pim_anycast_rp_ip: 10.254.254.254
 pim_group_range: 239.239.0.0/16
+
+dci_macsec_key: encrypt_with_ansible_vault
 
 vrfs:
   - vrf_name: Tenant-1

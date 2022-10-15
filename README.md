@@ -1,7 +1,7 @@
 🏭 vxlan\_evpn\_fabric
 ======================
 
-🪄 Configure VXLAN with EVPN controller in Cisco NXOS multisite clos-network.
+🪄 Configure VXLAN with EVPN controller in Cisco NXOS multisite clos-network.<br>
 🧪 Tested on Cisco Nexus C93180YC-FX and C92348GC-X.
 
 👇 **Underlay:**
@@ -9,19 +9,81 @@
 - P2P L3 links.
 - ECMP.
 - PIM Sparse with Anycast RP.
-<img src="./files/vxlan_evpn_underlay.png" alt="Underlay" width="600"/>
+
+```YAML
++ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+                         OSPF AREA 0.0.0.0                       |
+|
+         + - - - - - - - - - - - - - - - - - - - - - - - +       |
+|
+         |                PIM Anycast RP                 |       |
+|                  Loopback254 10.254.254.254/32
+         |                                               |       |
+|        +--------------------+ - -+--------------------+
+         |                    |    |                    |        |
+|        |      SPINE-1       |    |      SPINE-2       |
+         | RID: 10.250.250.30 |    | RID: 10.250.250.31 |        |
+|        |                    |    |                    |
+         +--------------------+    +--------------------+        |
+|                   |                         |
+                    |                         |                  |
+|            +------+-------------------------+------+
+             |              Loopback0 P2P            |           |
+|            |                                       |
+             |                                       |           |
+| +--------------------+                  +--------------------+
+  |                    |                  |                    | |
+| |       LEAF-1       |                  |       LEAF-2       |
+  | RID: 10.250.250.32 |                  | RID: 10.250.250.33 | |
+| |                    |                  |                    |
+  +--------------------+                  +--------------------+ |
++ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+```
 
 👇 **Overlay:**
 - iBGP EVPN control plane.
 - Multicast-replication (BUM).
-<img src="./files/vxlan_evpn_overlay.png" alt="Overlay" width="600"/>
+```YAML
++ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+                           BGP ASN 65001                         |
+|
+                                                                 |
+|                       BGP Route Reflector
+         +--------------------+    +--------------------+        |
+|        |                    |    |                    |
+         |      SPINE-1       |    |      SPINE-2       |        |
+|        | RID: 10.250.250.30 |    | RID: 10.250.250.31 |
+         |                    |    |                    |        |
+|        +--------------------+    +--------------------+
+                    |                         |                  |
+|                   |                         |
+             +------+-------------------------+------+           |
+|            |                                       |
+             |                                       |           |
+|            |                                       |
+  +--------------------+                  +--------------------+ |
+| |                    |                  |                    |
+  |       LEAF-1       |                  |       LEAF-2       | |
+| | RID: 10.250.250.32 |                  | RID: 10.250.250.33 |
+  |                    |                  |                    | |
+| +--------------------+                  +--------------------+
+           VTEP        |                           VTEP        | |
+| |     Loopback1                         |     Loopback1
+     10.254.250.32/32  |                     10.254.250.33/32  | |
+| + - - - - - - - - - - - - - - - - - - - + - - - - - - - - - -
+                   Distributed Anycast Gateway                 | |
+| |           GW IP: 172.16.100.1 (SVI per VLAN/VNI)
+                      GW MAC: 2020.DEAD.BEEF                   | |
+| + - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+                                                                 |
++ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+```
 
 👇 **DCI:**
 - Border-leafs in vPC.
-- eBGP in DCI underlay.
-- eBGP in DCI overlay.
+- eBGP in DCI underlay and overlay.
 - Ingress-replication (BUM).
-- MACsec encryption.
+- MACsec encryption (sites connected over dark-fiber).
 <img src="./files/vxlan_evpn_dci.png" alt="L2 Host Segment" width="600"/>
 
 👇 **L2 Host Segment:**
@@ -58,6 +120,7 @@ defaults/main.yml:
 - pim\_anycast\_rp\_ip
 - pim\_group\_range
 - bgp\_neighbors
+- dci\_macsec\_key
 - vrfs
 - host\_segments\_l3
 - host\_segments\_l2

@@ -2,7 +2,6 @@
 # tasks file for vxlan_evpn_fabric
 
 - name: Enable and set DCI interfaces in L3 mode. Ensure jumbo MTU.
-  # noqa loop-var-prefix
   cisco.nxos.nxos_interfaces:
     config:
       - name: "{{ item.name }}"
@@ -16,7 +15,6 @@
   notify: Save nxos
 
 - name: Ensure medium p2p for DCI interfacs.
-  # noqa loop-var-prefix
   cisco.nxos.nxos_config:
     lines:
       - medium p2p
@@ -28,7 +26,6 @@
   notify: Save nxos
 
 - name: Assign IP address to DCI interfaces.
-  # noqa loop-var-prefix
   cisco.nxos.nxos_l3_interfaces:
     config:
       - name: "{{ item.name }}"
@@ -42,7 +39,6 @@
   notify: Save nxos
 
 - name: Configure remote border-leafs as neighbors under BGP process.
-  # noqa loop-var-prefix
   cisco.nxos.nxos_bgp_global:
     config:
       as_number: "{{ bgp_asn }}"
@@ -59,7 +55,6 @@
   notify: Save nxos
 
 - name: Set address-family to IPv4-unicast for border-leaf neighbors under BGP process.
-  # noqa loop-var-prefix
   cisco.nxos.nxos_bgp_neighbor_address_family:
     config:
       as_number: "{{ bgp_asn }}"
