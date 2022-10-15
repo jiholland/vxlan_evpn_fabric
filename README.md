@@ -1,17 +1,16 @@
 🏭 vxlan\_evpn\_fabric
 ======================
 
-🪄 Configure VXLAN with EVPN controller in Cisco NXOS multisite clos-network.<br>
-🧪 Tested on Cisco Nexus C93180YC-FX and C92348GC-X.
+🪄 Configure VXLAN with EVPN controller in Cisco NXOS multisite clos-network.
 
-👇 **Underlay:**
+**Underlay:**
 - OSPF routing.
 - P2P L3 links.
 - ECMP.
 - PIM Sparse with Anycast RP.
 ```YAML
 + - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-                         OSPF AREA 0.0.0.0                       |
+                        OSPF AREA 0.0.0.0                        |
 |
          + - - - - - - - - - - - - - - - - - - - - - - - +       |
 |                         PIM Anycast RP
@@ -22,44 +21,41 @@
          +--------------------+    +--------------------+        |
 |                   |                         |
              +------+-------------------------+------+           |
-|            |                                       |
-  +--------------------+     Loopback0    +--------------------+ |
-| |       LEAF-1       |       (P2P)      |       LEAF-2       |
+|            |              Loopback0                |
+  +--------------------+      (P2P)       +--------------------+ |
+| |       LEAF-1       |                  |       LEAF-2       |
   | RID: 10.250.250.32 |                  | RID: 10.250.250.33 | |
 | +--------------------+                  +--------------------+
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - +
 ```
-
-👇 **Overlay:**
+**Overlay:**
 - iBGP EVPN control plane.
 - Multicast-replication (BUM).
 ```YAML
-+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-                           BGP ASN 65001                         |
-|                                                                 
++ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+                          BGP ASN 65001                          |
+|         +--------------------+   +--------------------+
+          |      SPINE-1       |   |      SPINE-2       |        |
+|         | RID: 10.250.250.30 |   | RID: 10.250.250.31 |
           +--------------------+   +--------------------+        |
-|         |      SPINE-1       |   |      SPINE-2       |         
-          | RID: 10.250.250.30 |   | RID: 10.250.250.31 |        |
-|         +--------------------+   +--------------------+         
-                     |                        |                  |
-|            +-------+------------------------+------+            
-             |                                       |           |
-| +--------------------+                  +--------------------+  
-  |       LEAF-1       |                  |       LEAF-2       | |
-| | RID: 10.250.250.32 |                  | RID: 10.250.250.33 |  
+|                    |                        |
+             +-------+------------------------+------+           |
+|            |                                       |
   +--------------------+                  +--------------------+ |
-|          VTEP        |                           VTEP        |  
-  |     Loopback1                         |     Loopback1        |
-|    10.254.250.32/32  |                     10.254.250.33/32  |  
-  + - - - - - - - - - - - - - - - - - - - + - - - - - - - - - -  |
-|                  Distributed Anycast Gateway                 |  
-  |                    GW IP: 172.16.100.1                       |
-|                     GW MAC: 2020.DEAD.BEEF                   |  
-  + - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  |
-+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+| |       LEAF-1       |                  |       LEAF-2       |
+  | RID: 10.250.250.32 |                  | RID: 10.250.250.33 | |
+| +--------------------+                  +--------------------+
+           VTEP        |                           VTEP        | |
+| |     Loopback1                         |     Loopback1
+     10.254.250.32/32  |                     10.254.250.33/32  | |
+| + - - - - - - - - - - - - - - - - - - - + - - - - - - - - - -
+                   Distributed Anycast Gateway                 | |
+| |                    GW IP: 172.16.100.1
+                      GW MAC: 2020.DEAD.BEEF                   | |
+| + - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - +
 ```
-
-👇 **DCI:**
+**DCI:**
 - Border-leafs in vPC.
 - eBGP in DCI underlay and overlay.
 - Ingress-replication (BUM).
@@ -78,8 +74,7 @@
                             |                  |                   |                   |                          
                             +------------------+-------------------+-------------------+                          
 ```
-
-👇 **L2 Host Segment:**
+**L2 Host Segment:**
 - No distributed anycast gateway.
 - No VLAN SVI.
 - No VRF.
@@ -105,7 +100,7 @@
 |   VNI 10100   |                           |   VNI 10100   |
 +---------------+                           +---------------+
 ```
-👇 **L3 Host Segment:**
+**L3 Host Segment:**
 - Distributed anycast gateway.
 - Multi-tenancy (VRFs).
 - ARP suppression at leafs.
@@ -134,20 +129,16 @@
   +---------------+                           +---------------+
 + - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - +
 ```
-
-👇 **Broadcast, unknown Unicast and Multicast:**
-- Site-internal BUM is multicast.
-- Multisite BUM is always ingress replicate (unicast).
-
-📚 **Resources:**
-- [Cisco Nexus VXLAN configuration guide](https://www.cisco.com/c/en/us/td/docs/dcn/nx-os/nexus9000/101x/configuration/vxlan/cisco-nexus-9000-series-nx-os-vxlan-configuration-guide-release-101x/m_n9k_software_preface.html)<br>
-- [Cisco VXLAN-EVPN Multi-Site Design and Deployment whitepaper](https://www.cisco.com/c/en/us/products/collateral/switches/nexus-9000-series-switches/white-paper-c11-739942.html#Introduction)<br>
-- [Ansible documentation for Cisco Nexus](https://docs.ansible.com/ansible/latest/collections/cisco/nxos/index.html)<br>
+**Resources:**
+📚 [Cisco Nexus VXLAN configuration guide](https://www.cisco.com/c/en/us/td/docs/dcn/nx-os/nexus9000/101x/configuration/vxlan/cisco-nexus-9000-series-nx-os-vxlan-configuration-guide-release-101x/m_n9k_software_preface.html)<br>
+📚 [Cisco VXLAN-EVPN Multi-Site Design and Deployment whitepaper](https://www.cisco.com/c/en/us/products/collateral/switches/nexus-9000-series-switches/white-paper-c11-739942.html#Introduction)<br>
+📚 [Ansible documentation for Cisco Nexus](https://docs.ansible.com/ansible/latest/collections/cisco/nxos/index.html)<br>
 
 Requirements
 ------------
 
-💿 [Cisco NXOS Collection](https://galaxy.ansible.com/cisco/nxos) <br>
+💿 [Cisco NXOS Collection](https://galaxy.ansible.com/cisco/nxos)
+🧪 Tested on Cisco Nexus C93180YC-FX and C92348GC-X.
 
 Role Variables
 --------------
