@@ -160,7 +160,7 @@
 |   VNI 10100   |                           |   VNI 10101   |
 +---------------+                           +---------------+
 ```
-***Broadcast, Unknown Unicast, Multicast:***
+**Broadcast, Unknown Unicast, Multicast:**
 - BUM between sites are allways ingress-replicated (unicast).
 ```YAML
                      + - - - - - - -
