@@ -1,7 +1,7 @@
 🏭 vxlan\_evpn\_fabric
 ======================
 
-🪄 Configure VXLAN with EVPN controller in Cisco NXOS multisite clos-network.
+🪄 Configure multisite VXLAN-EVPN fabric.
 
 **Underlay:**
 - OSPF routing.
