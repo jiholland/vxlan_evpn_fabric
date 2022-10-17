@@ -9,7 +9,7 @@ pim_group_range: 239.239.0.0/16
 
 dci_macsec_key: encrypt_with_ansible_vault
 
-vrfs:
+host_vrfs:
   - vrf_name: Tenant-1
     vrf_description: "*** VRF for Tenant-1 ***"
     vni_id: 10010

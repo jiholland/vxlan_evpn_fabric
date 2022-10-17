@@ -69,7 +69,7 @@
     - name: Configure VRF.
       tags: vrf
       ansible.builtin.include_tasks:
-        file: 06_vrf.yml
+        file: 06_host_tenants.yml
         apply:
           tags: vrf
 
