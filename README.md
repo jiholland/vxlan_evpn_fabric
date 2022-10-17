@@ -109,9 +109,6 @@
 +--------------+   +--------------+   +--------------+
 ```
 **L2 Host Segment:**
-- "No" spanning-tree.
-- ECMP.
-- Not limited to 4000 VLANS.
 ```YAML
            +--------------+          +--------------+
            |   SPINE-1    |          |   SPINE-2    |
