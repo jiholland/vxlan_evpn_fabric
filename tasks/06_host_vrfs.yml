@@ -10,9 +10,6 @@
         mapped_vni: "{{ item.vni_id }}"
         enabled: true
     state: merged
-  loop: "{{ host_vrfs }}"
-  loop_control:
-    label: VLAN {{ item.vlan_id }}, VNI {{ item.vni_id }}
   notify: Save nxos
 
 - name: Create VRF context and associate to VNI.
@@ -23,9 +20,6 @@
     rd: auto
     admin_state: up
     state: present
-  loop: "{{ host_vrfs }}"
-  loop_control:
-    label: VRF {{ item.vrf_name }}, VNI {{ item.vni_id }}
   notify: Save nxos
 
 - name: Configure VRF address-family.
@@ -34,9 +28,6 @@
     afi: ipv4
     route_target_both_auto_evpn: true
     state: present
-  loop: "{{ host_vrfs }}"
-  loop_control:
-    label: VRF {{ item.vrf_name }}
   notify: Save nxos
 
 - name: Create VLAN SVI.
@@ -45,9 +36,6 @@
       - name: Vlan{{ item.vlan_id }}
         enabled: true
     state: merged
-  loop: "{{ host_vrfs }}"
-  loop_control:
-    label: VLAN SVI {{ item.vlan_id }}
   notify: Save nxos
 
 - name: Associate VLAN SVI to VRF context.
@@ -55,9 +43,6 @@
     vrf: "{{ item.vrf_name }}"
     interface: Vlan{{ item.vlan_id }}
     state: present
-  loop: "{{ host_vrfs }}"
-  loop_control:
-    label: VRF {{ item.vrf_name }}, VLAN SVI {{ item.vlan_id }}
   notify: Save nxos
 
 - name: Enable IP forwarding and jumbo MTU for VLAN SVI.
@@ -69,9 +54,6 @@
         mtu: "{{ mtu }}"
         enabled: true
     state: merged
-  loop: "{{ host_vrfs }}"
-  loop_control:
-    label: VLAN {{ item.vlan_id }}
   notify: Save nxos
 
 - name: Map VNI to VXLAN VTEP interface and associate to VRF.
@@ -80,9 +62,6 @@
     vni: "{{ item.vni_id }}"
     assoc_vrf: true
     state: present
-  loop: "{{ host_vrfs }}"
-  loop_control:
-    label: VNI {{ item.vni_id }}
   notify: Save nxos
 
 - name: Configure VRF under BGP process.
@@ -95,7 +74,4 @@
           vrf: "{{ item.vrf_name }}"
           advertise_l2vpn_evpn: true
     state: merged
-  loop: "{{ host_vrfs }}"
-  loop_control:
-    label: VRF {{ item.vrf_name }}
   notify: Save nxos

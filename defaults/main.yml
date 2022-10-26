@@ -7,6 +7,8 @@ pim_anycast_rp_set: "{{ bgp_neighbors }}"
 pim_anycast_rp_ip: 10.254.254.254
 pim_group_range: 239.239.0.0/16
 
+global_mcast_group_l2: 239.239.239.239
+
 dci_macsec_key: encrypt_with_ansible_vault
 
 host_vrfs:
@@ -31,29 +33,21 @@ host_segments_l3:
     vlan_name: Servers
     vlan_svi_ip: 172.16.100.1/24
     vlan_svi_description: "*** L2 VNI HOST SEGMENT WITH ANYCAST GATEWAY ***"
-    mcast_group: 239.239.239.100
-    multisite: enable
   - vrf: Tenant-1
     vni_id: 10101
     vlan_id: 101
     vlan_name: Databases
     vlan_svi_ip: 172.16.101.1/24
     vlan_svi_description: "*** L2 VNI HOST SEGMENT WITH ANYCAST GATEWAY ***"
-    mcast_group: 239.239.239.101
-    multisite: enable
   - vrf: Tenant-2
     vni_id: 20200
     vlan_id: 200
     vlan_name: Netflix
     vlan_svi_ip: 192.168.200.1/24
     vlan_svi_description: "*** L2 VNI HOST SEGMENT WITH ANYCAST GATEWAY ***"
-    mcast_group: 239.239.239.200
-    multisite: enable
 
 # Hosts segments without distributed anycast gateway
 host_segments_l2:
   - vni_id: 10102
     vlan_id: 102
     vlan_name: Mail
-    mcast_group: 239.239.239.102
-    multisite: enable

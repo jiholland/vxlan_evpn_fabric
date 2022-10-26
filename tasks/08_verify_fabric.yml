@@ -14,7 +14,6 @@
       ansible.builtin.debug:
         msg:
           - Spines should be neighbor with all leafs.
-          - Leafs should be neighbor with all spines.
       run_once: true
 
     - name: Print OSPF Neighbors.
@@ -33,7 +32,6 @@
       ansible.builtin.debug:
         msg:
           - Spines should be neighbor with all leafs.
-          - Leafs should be neighbor with all spines.
       run_once: true
 
     - name: Print PIM Neighbors.
@@ -78,7 +76,6 @@
       ansible.builtin.debug:
         msg:
           - Spine (RR) should see all leafs as neighbors.
-          - Leafs should see spines (RR) as neighbors.
           - Border-leafs should also see remote border-leafs in separate BGP AS as neighbors.
       run_once: true
 
@@ -96,8 +93,8 @@
     - name: Print information about the next task.
       ansible.builtin.debug:
         msg:
-          - "Next task: Run VXLAN config-check."
-          - "Timeout is 60 seconds"
+          - Next task is run VXLAN config-check.
+          - Timeout is 60 seconds.
       run_once: true
 
     - name: Run VXLAN config-check.

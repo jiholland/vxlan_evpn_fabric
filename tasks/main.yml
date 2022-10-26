@@ -66,12 +66,13 @@
   when: network_function in ['leaf', 'border-leaf']
   block:
 
-    - name: Configure VRF.
+    - name: Configure tenant VRF.
       tags: vrf
       ansible.builtin.include_tasks:
-        file: 06_host_tenants.yml
+        file: 06_host_vrfs.yml
         apply:
           tags: vrf
+      loop: "{{ host_vrfs }}"
 
     - name: Configure host segments with distributed anycast gateway.
       tags: l3
@@ -79,6 +80,7 @@
         file: 07_host_segments_l3.yml
         apply:
           tags: l3
+      loop: "{{ host_segments_l3 }}"
 
     - name: Configure host segments without distributed anycast gateway.
       tags: l2
@@ -86,6 +88,7 @@
         file: 07_host_segments_l2.yml
         apply:
           tags: l2
+      loop: "{{ host_segments_l2 }}"
 
 
 - name: Verify fabric.

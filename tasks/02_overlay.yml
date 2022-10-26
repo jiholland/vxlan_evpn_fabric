@@ -64,6 +64,7 @@
         interface: nve1
         description: "*** VXLAN VTEP ***"
         source_interface: "{{ vtep_loopback }}"
+        global_mcast_group_L2: "{{ global_mcast_group_l2 }}"
         host_reachability: true
         shutdown: false
         state: present
