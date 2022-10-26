@@ -24,14 +24,14 @@
 - name: Configure fabric underlay.
   tags: fabric_underlay
   ansible.builtin.include_tasks:
-    file: 01_underlay.yml
+    file: 01_fabric_underlay.yml
     apply:
       tags: fabric_underlay
 
 - name: Configure fabric overlay.
   tags: fabric_overlay
   ansible.builtin.include_tasks:
-    file: 02_overlay.yml
+    file: 02_fabric_overlay.yml
     apply:
       tags: fabric_overlay
 
