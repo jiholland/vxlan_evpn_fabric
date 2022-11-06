@@ -5,7 +5,7 @@
   cisco.nxos.nxos_vlans:
     config:
       - vlan_id: "{{ item.vlan_id }}"
-        name: "{{ item.vlan_name }}"
+        name: "{{ item.vlan_name | lower }}"
         mapped_vni: "{{ item.vni_id }}"
     state: merged
   notify: Save nxos
@@ -18,20 +18,12 @@
     state: present
   notify: Save nxos
 
-- name: Map VNI to VXLAN VTEP interface and multicast-group for BUM replication. Disable ARP suppression.
+- name: Map VNI to VXLAN VTEP interface and multicast-group for BUM replication. Disable ARP suppression. Enable multisite ingress replication at border-leafs.
   cisco.nxos.nxos_vxlan_vtep_vni:
     interface: nve1
     vni: "{{ item.vni_id }}"
     ingress_replication: default
     suppress_arp_disable: true  # ARP suppression is only supported for a VNI if the VTEP hosts Distributed Anycast Gateway for this VNI.
+    multisite_ingress_replication: "{{ (network_function == 'border-leaf') | ternary('enable', omit) }}"  # Multisite BUM is always ingress replicated
     state: present
-  notify: Save nxos
-
-- name: Enable multisite ingress replication at border-leafs.
-  cisco.nxos.nxos_vxlan_vtep_vni:
-    interface: nve1
-    vni: "{{ item.vni_id }}"
-    multisite_ingress_replication: enable  # Multisite BUM is always ingress replicated
-    state: present
-  when: network_function == 'border-leaf'
   notify: Save nxos
