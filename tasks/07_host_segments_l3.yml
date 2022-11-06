@@ -46,7 +46,7 @@
     state: merged
   notify: Save nxos
 
-- name: Configure VNI for EVPN.
+- name: Add VNI to EVPN process in BGP.
   cisco.nxos.nxos_evpn_vni:
     vni: "{{ item.vni_id }}"
     route_distinguisher: auto
