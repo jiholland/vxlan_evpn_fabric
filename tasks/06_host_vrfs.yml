@@ -12,6 +12,12 @@
     state: merged
   notify: Save nxos
 
+- name: Reserve VLAN dedicated for routing in the overlay.
+  cisco.nxos.nxos_config:
+    lines:
+      - system vlan nve-overlay id {{ item.vlan_id }}
+  notify: Save nxos
+
 - name: Create VRF context and associate to VNI.
   cisco.nxos.nxos_vrf:
     name: "{{ item.vrf_name }}"
