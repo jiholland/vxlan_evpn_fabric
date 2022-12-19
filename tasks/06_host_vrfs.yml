@@ -1,8 +1,13 @@
 ---
 # tasks file for vxlan_evpn_fabric
 
-- name: Create VLAN dedicated for routing in overlay.
-        Map VLAN to VNI (one dedicated VLAN and VNI per VRF).
+- name: Reserve VLAN dedicated for routing in the overlay.
+  cisco.nxos.nxos_config:
+    lines:
+      - system vlan nve-overlay id {{ item.vlan_id }}
+  notify: Save nxos
+
+- name: Create VLAN dedicated for routing in overlay. Map VLAN to dedicated VNI.
   cisco.nxos.nxos_vlans:
     config:
       - vlan_id: "{{ item.vlan_id }}"
@@ -10,12 +15,6 @@
         mapped_vni: "{{ item.vni_id }}"
         enabled: true
     state: merged
-  notify: Save nxos
-
-- name: Reserve VLAN dedicated for routing in the overlay.
-  cisco.nxos.nxos_config:
-    lines:
-      - system vlan nve-overlay id {{ item.vlan_id }}
   notify: Save nxos
 
 - name: Create VRF context and associate to VNI.
