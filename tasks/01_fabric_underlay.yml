@@ -132,18 +132,18 @@
   when: nve_infra_vlan_id is defined
   block:
 
+    - name: Define a non-VXLAN enabled VLAN as backup routed path.
+      cisco.nxos.nxos_config:
+        lines:
+          - system nve infra-vlans {{ nve_infra_vlan_id }}
+      notify: Save nxos
+
     - name: Create VLAN for NVE-infra.
       cisco.nxos.nxos_vlans:
         config:
           - vlan_id: "{{ nve_infra_vlan_id }}"
             name: BACKUP_VLAN_ROUTING_NVE_INFRA
         state: merged
-      notify: Save nxos
-
-    - name: Ensure NVE-infra is infra-vlan.
-      cisco.nxos.nxos_config:
-        lines:
-          - system nve infra-vlans {{ nve_infra_vlan_id }}
       notify: Save nxos
 
     - name: Create SVI for NVE-infra. Ensure jumbo MTU. Ensure interface description.
