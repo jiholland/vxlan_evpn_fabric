@@ -1,10 +1,11 @@
 ---
 # tasks file for vxlan_evpn_fabric
 
-- name: Set multisite ID for fabric. Ensure delay-restore is 300 seconds.
+- name: Set multisite ID for fabric. Ensure delay-restore is 300 seconds and advertise pip.
   cisco.nxos.nxos_config:
     lines:
       - delay-restore time 300
+      - dci-advertise-pip
     parents:
       - evpn multisite border-gateway {{ bgp_asn }}
   notify: Save nxos
