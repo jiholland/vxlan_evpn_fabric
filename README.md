@@ -60,6 +60,7 @@
 - eBGP in DCI underlay and overlay.
 - Ingress-replication (BUM).
 - MACsec encryption (replace with CloudSec)
+
 **L2 Host Segment:**
 ```YAML
 +--------------+                             +--------------+
