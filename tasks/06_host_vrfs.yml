@@ -5,7 +5,7 @@
   cisco.nxos.nxos_config:
     lines:
       - system vlan nve-overlay id {{ item.vlan_id }}
-  notify: Save nxos
+  when: not ansible_check_mode
 
 - name: Create VLAN dedicated for routing in overlay. Map VLAN to dedicated VNI.
   cisco.nxos.nxos_vlans:
@@ -78,5 +78,8 @@
           safi: unicast
           vrf: "{{ item.vrf_name }}"
           advertise_l2vpn_evpn: true
+          redistribute:
+            - protocol: direct
+              route_map: "{{ rmap_host_svi_name }}"
     state: merged
   notify: Save nxos

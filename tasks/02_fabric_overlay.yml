@@ -49,6 +49,18 @@
     label: BGP neighbor {{ hostvars[item]['inventory_hostname'] }}
   notify: Save nxos
 
+- name: Create route-map to redistribute Host-SVI (Silent Host).
+  cisco.nxos.nxos_route_maps:
+    config:
+      - route_map: "{{ rmap_host_svi_name }}"
+        entries:
+          - sequence: 10
+            action: permit
+            match:
+              tags: "{{ rmap_host_svi_tag }}"
+    state: merged
+  when: network_function in ['leaf', 'border-leaf']
+  notify: Save nxos
 
 - name: VTEP configuration for leafs and border-leafs.
   when: network_function in ['leaf', 'border-leaf']
