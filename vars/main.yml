@@ -20,6 +20,3 @@ rid_loopback: loopback0    # RID AND OSPF/BGP-PEERING
 vtep_loopback: loopback1   # NVE INTERFACE (PIP VTEP)
 dci_loopback: loopback100  # MULTI-SITE INTERFACE (VIP VTEP)
 pim_loopback: loopback254  # PIM ANYCAST RP
-
-rmap_host_svi_name: HOST-SVI
-rmap_host_svi_tag: 12345

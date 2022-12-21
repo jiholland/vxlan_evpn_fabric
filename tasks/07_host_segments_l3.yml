@@ -42,7 +42,6 @@
       - name: Vlan{{ item.vlan_id }}
         ipv4:
           - address: "{{ item.vlan_svi_ip }}"
-            tag: "{{ rmap_host_svi_tag }}"
         redirects: false
     state: merged
   notify: Save nxos
