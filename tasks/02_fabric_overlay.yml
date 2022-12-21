@@ -69,3 +69,26 @@
         shutdown: false
         state: present
       notify: Save nxos
+
+
+- name: Configure vPC multihoming.
+  when: vpc_keepalive_ip is defined
+  block:
+
+    - name: Advertise PIP in BGP process.
+      cisco.nxos.nxos_bgp_address_family:
+        config:
+          address_family:
+            - afi: l2vpn
+              safi: evpn
+              advertise_pip: true
+        state: merged
+      notify: Save nxos
+
+    - name: Advertise virtual-rmac in NVE interface.
+      cisco.nxos.nxos_config:
+        lines:
+          - advertise virtual-rmac  # Enter shutdown, no shutdown to take effect
+        parents:
+          - interface nve1
+      notify: Save nxos

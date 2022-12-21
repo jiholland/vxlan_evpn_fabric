@@ -59,7 +59,7 @@
 - Border-leafs in vPC.
 - eBGP in DCI underlay and overlay.
 - Ingress-replication (BUM).
-- MACsec encryption (replace with CloudSec)
+- MACsec encryption (dark-fiber).
 
 **L2 Host Segment:**
 ```YAML

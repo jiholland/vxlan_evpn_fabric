@@ -1,11 +1,10 @@
 ---
 # tasks file for vxlan_evpn_fabric
 
-- name: Set multisite ID for fabric. Ensure delay-restore is 300 seconds and advertise pip.
+- name: Set multisite ID for fabric. Ensure delay-restore is 300 seconds.
   cisco.nxos.nxos_config:
     lines:
       - delay-restore time 300
-      - dci-advertise-pip
     parents:
       - evpn multisite border-gateway {{ bgp_asn }}
   notify: Save nxos
@@ -57,24 +56,6 @@
   loop: "{{ bgp_neighbors }}"
   loop_control:
     label: BGP neighbor {{ hostvars[item]['inventory_hostname'] }}
-  notify: Save nxos
-
-- name: Advertise PIP in BGP process.  # For vPC.
-  cisco.nxos.nxos_bgp_address_family:
-    config:
-      address_family:
-        - afi: l2vpn
-          safi: evpn
-          advertise_pip: true
-    state: merged
-  notify: Save nxos
-
-- name: Advertise virtual-rmac in NVE interface.  # For vPC.
-  cisco.nxos.nxos_config:
-    lines:
-      - advertise virtual-rmac  # Enter shutdown, no shutdown to take effect
-    parents:
-      - interface nve1
   notify: Save nxos
 
 - name: Ensure dci-tracking on fabric-external interfaces.

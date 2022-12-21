@@ -15,9 +15,9 @@
     - configure terminal
     - key chain 1 macsec
     - key 1000
-    - key-octet-string {{ dci_macsec_key }} cryptographic-algorithm AES_256_CMAC
+    - key-octet-string {{ macsec_key }} cryptographic-algorithm AES_256_CMAC
   no_log: true
-  notify: Save nxos
+  when: not ansible_check_mode
 
 - name: Apply MACsec policy to DCI-interfaces.
   cisco.nxos.nxos_config:

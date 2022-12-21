@@ -9,7 +9,7 @@ pim_group_range: 239.239.0.0/16
 
 global_mcast_group_l2: 239.239.239.239
 
-dci_macsec_key: encrypt_with_ansible_vault
+macsec_key: encrypt_with_ansible_vault
 
 host_vrfs:
   - vrf_name: Tenant-1
